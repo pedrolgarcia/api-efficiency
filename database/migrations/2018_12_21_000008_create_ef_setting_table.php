@@ -10,7 +10,7 @@ class CreateEfSettingTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_setting';
+    public $set_schema_table = 'settings';
 
     /**
      * Run the migrations.
@@ -31,17 +31,17 @@ class CreateEfSettingTable extends Migration
             $table->nullableTimestamps();
 
             $table->foreign('language_id')
-                ->references('id')->on('ef_language')
+                ->references('id')->on('languages')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('user_id')
-                ->references('id')->on('ef_user')
+                ->references('id')->on('users')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('theme_id')
-                ->references('id')->on('ef_theme')
+                ->references('id')->on('themes')
                 ->onDelete('no action')
                 ->onUpdate('no action');
         });

@@ -8,6 +8,6 @@ class ErrorType extends Model
 {
     public function error()
     {
-        return $this->hasOne('App\Error');
+        return $this->hasMany('App\Error');
     }
 }

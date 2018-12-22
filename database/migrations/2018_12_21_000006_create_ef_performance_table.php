@@ -10,7 +10,7 @@ class CreateEfPerformanceTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_performance';
+    public $set_schema_table = 'performances';
 
     /**
      * Run the migrations.
@@ -45,7 +45,7 @@ class CreateEfPerformanceTable extends Migration
             $table->nullableTimestamps();
 
             $table->foreign('user_id')
-                ->references('id')->on('ef_user')
+                ->references('id')->on('users')
                 ->onDelete('no action')
                 ->onUpdate('no action')
                 ->unsigned();

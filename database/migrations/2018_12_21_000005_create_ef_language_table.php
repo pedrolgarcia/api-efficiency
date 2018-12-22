@@ -10,7 +10,7 @@ class CreateEfLanguageTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_language';
+    public $set_schema_table = 'languages';
 
     /**
      * Run the migrations.

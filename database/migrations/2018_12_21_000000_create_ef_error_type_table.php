@@ -10,7 +10,7 @@ class CreateEfErrorTypeTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_error_type';
+    public $set_schema_table = 'error_types';
 
     /**
      * Run the migrations.

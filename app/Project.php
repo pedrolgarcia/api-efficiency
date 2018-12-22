@@ -13,7 +13,7 @@ class Project extends Model
 
     public function status() 
     {
-        return $this->belongTo('App\Status');
+        return $this->belongsTo('App\Status');
     }
 
     public function tasks() 

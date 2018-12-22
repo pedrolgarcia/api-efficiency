@@ -10,7 +10,7 @@ class CreateEfAnnotationTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_annotation';
+    public $set_schema_table = 'annotations';
 
     /**
      * Run the migrations.
@@ -28,7 +28,7 @@ class CreateEfAnnotationTable extends Migration
             $table->integer('report_id')->unsigned();
 
             $table->foreign('report_id')
-                ->references('id')->on('ef_report')
+                ->references('id')->on('reports')
                 ->onDelete('cascade')
                 ->onUpdate('no action');
         });

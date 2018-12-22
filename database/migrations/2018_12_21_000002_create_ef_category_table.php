@@ -10,7 +10,7 @@ class CreateEfCategoryTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_category';
+    public $set_schema_table = 'categories';
 
     /**
      * Run the migrations.

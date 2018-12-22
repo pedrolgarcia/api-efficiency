@@ -10,7 +10,7 @@ class CreateEfReportTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_report';
+    public $set_schema_table = 'reports';
 
     /**
      * Run the migrations.
@@ -29,7 +29,7 @@ class CreateEfReportTable extends Migration
             $table->nullableTimestamps();
 
             $table->foreign('task_id')
-                ->references('id')->on('ef_task')
+                ->references('id')->on('tasks')
                 ->onDelete('no action')
                 ->onUpdate('no action');
         });

@@ -10,7 +10,7 @@ class CreateEfProjectTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_project';
+    public $set_schema_table = 'projects';
 
     /**
      * Run the migrations.
@@ -34,12 +34,12 @@ class CreateEfProjectTable extends Migration
             $table->nullableTimestamps();
 
             $table->foreign('user_id')
-                ->references('id')->on('ef_user')
+                ->references('id')->on('users')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('status_id')
-                ->references('id')->on('ef_status')
+                ->references('id')->on('statuses')
                 ->onDelete('no action')
                 ->onUpdate('no action');
         });

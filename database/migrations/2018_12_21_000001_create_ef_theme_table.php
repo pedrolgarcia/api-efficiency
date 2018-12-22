@@ -10,7 +10,7 @@ class CreateEfThemeTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_theme';
+    public $set_schema_table = 'themes';
 
     /**
      * Run the migrations.

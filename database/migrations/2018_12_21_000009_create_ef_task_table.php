@@ -10,7 +10,7 @@ class CreateEfTaskTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_task';
+    public $set_schema_table = 'tasks';
 
     /**
      * Run the migrations.
@@ -38,17 +38,17 @@ class CreateEfTaskTable extends Migration
 
 
             $table->foreign('category_id')
-                ->references('id')->on('ef_category')
+                ->references('id')->on('categories')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('project_id')
-                ->references('id')->on('ef_project')
+                ->references('id')->on('projects')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('status_id')
-                ->references('id')->on('ef_status')
+                ->references('id')->on('statuses')
                 ->onDelete('no action')
                 ->onUpdate('no action');
         });

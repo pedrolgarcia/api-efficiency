@@ -10,7 +10,7 @@ class CreateEfErrorTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_error';
+    public $set_schema_table = 'errors';
 
     /**
      * Run the migrations.
@@ -34,12 +34,12 @@ class CreateEfErrorTable extends Migration
 
 
             $table->foreign('error_type_id')
-                ->references('id')->on('ef_error_type')
+                ->references('id')->on('error_types')
                 ->onDelete('no action')
                 ->onUpdate('no action');
 
             $table->foreign('error_report_id')
-                ->references('id')->on('ef_error_report')
+                ->references('id')->on('error_reports')
                 ->onDelete('no action')
                 ->onUpdate('no action');
         });

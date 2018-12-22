@@ -10,7 +10,7 @@ class CreateEfStatusTable extends Migration
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'ef_status';
+    public $set_schema_table = 'statuses';
 
     /**
      * Run the migrations.
