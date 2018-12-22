@@ -28,15 +28,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function projects() {
+    public function projects() 
+    {
         return $this->hasMany('App\Project');
     }
 
-    public function setting() {
+    public function setting() 
+    {
         return $this->hasOne('App\Setting');
     }
 
-    public function performance() {
+    public function performance() 
+    {
         return $this->hasOne('App\Performance');
     }
 }

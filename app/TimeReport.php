@@ -8,6 +8,6 @@ class TimeReport extends Model
 {
     public function report()
     {
-        return $this->belongTo('App\Report');
+        return $this->belongsTo('App\Report');
     }
 }

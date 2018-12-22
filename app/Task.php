@@ -8,12 +8,12 @@ class Task extends Model
 {
     public function status()
     {
-        return $this->hasOne('App\Status');
+        return $this->belongsTo('App\Status');
     }
 
     public function category()
     {
-        return $this->hasOne('App\Category');
+        return $this->belongsTo('App\Category');
     }
 
     public function project()

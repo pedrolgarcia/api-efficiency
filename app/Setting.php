@@ -8,16 +8,16 @@ class Setting extends Model
 {
     public function language()
     {
-        return $this->hasOne('App\Language');
+        return $this->belongsTo('App\Language');
     }
 
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function theme()
     {
-        return $this->hasOne('App\Theme');
+        return $this->belongsTo('App\Theme');
     }
 }
