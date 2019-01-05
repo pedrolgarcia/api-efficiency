@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\User;
+use App\Task;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -13,8 +15,27 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return UserResource::collection($users);
+        $user = User::find(auth()->user()->id);
+        $me = $user->replicate();
+
+        $projects = $user->projects;
+        $me['totalProjects'] = $projects->count();
+        $me['totalTasks'] = 0;
+        $me['overdueTasks'] = 0;
+
+        foreach ($projects as $project) {
+            if($project->tasks) {
+                $tasks = $project->tasks;
+                $me['totalTasks'] += $tasks->count();
+
+                $overdueTasks = $tasks->where('ended_at', '<', Carbon::now()->toDateTimeString())->count();
+                if($overdueTasks > 0) {
+                    $me['overdueTasks'] = $overdueTasks;
+                }
+            }
+        }
+
+        return response()->json($me);
     }
 
     public function create()
@@ -24,21 +45,19 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        if(User::where('email', $request->email)) {
-            return response()->json(['error' => 'Já existe um usuário com este e-mail']);
+        if($this->verifyEmail($request) > 0) {
+            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Já existe um usuário com este e-mail'], 400);
         } else if($request->password != $request->passwordConfirmation) {
-            return response()->json(['error' => 'Confirmação de senha inválida'], 401);
+            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Confirmação de senha inválida'], 400);
         } else {
-            $password = Hash::make($request->password);
+            $data = $request->except('email_verified_at', 'remember_token');
+            $data['password'] = Hash::make($request->password);
+            $data['avatar'] = '/src/assets/users/profile.png';
 
-            $user = new User;
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = $password;
-            $user->avatar = '/src/assets/users/profile.png';
+            $user = User::create($data);
             $user->save();
 
-            return response()->json(['success' => 'Usuário cadastrado com sucesso', $user], 200);
+            return response()->json(['success' => 'Cadastrou com sucesso!', 'message' => 'Acesse agora mesmo sua conta e aproveite nosso app!', $user], 200);
         }        
     }
 
@@ -60,5 +79,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function verifyEmail(Request $request, $edit = false) {
+        $verification = $edit ? 
+            User::where('email', $request->email)->count() :
+            User::where('email', $request->email)->where('id', '!=', $request->id)->count();
+
+        return $verification;
     }
 }

@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function projects() 
     {
-        return $this->hasMany('App\Project');
+        return $this->hasMany('App\Project', 'user_id');
     }
 
     public function setting() 

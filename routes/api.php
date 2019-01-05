@@ -13,14 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('profile', 'UserController');
-
+// Autentication routes
 Route::post('login', 'AuthController@login');
 Route::post('register', 'UserController@store');
 Route::post('refresh', 'AuthController@refresh');
 
 Route::group(['middleware' => 'jwt.auth',], function () {
     Route::get('logout', 'AuthController@logout');
-    Route::get('me', 'AuthController@me');
+
+    Route::resource('users', 'UserController');
+    Route::resource('projects', 'ProjectController');
 
 });
