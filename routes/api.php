@@ -20,8 +20,13 @@ Route::post('refresh', 'AuthController@refresh');
 
 Route::group(['middleware' => 'jwt.auth',], function () {
     Route::get('logout', 'AuthController@logout');
+    Route::get('user', 'AuthController@me');
 
-    Route::resource('users', 'UserController');
+    // User
+    Route::get('me', 'UserController@show');
+    Route::put('me', 'UserController@update');
+
+    // Project
     Route::resource('projects', 'ProjectController');
 
 });

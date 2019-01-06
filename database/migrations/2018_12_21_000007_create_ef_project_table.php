@@ -25,6 +25,7 @@ class CreateEfProjectTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name', 45);
+            $table->text('description');
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
             $table->timestamp('completed_at')->nullable();

@@ -15,6 +15,36 @@ class UserController extends Controller
 {
     public function index()
     {
+        
+    }
+
+    public function create()
+    {
+        
+    }
+
+    public function store(Request $request)
+    {
+        if($this->verifyEmail($request) > 0) {
+            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Já existe um usuário com este e-mail'], 400);
+        }
+        
+        if($request->password != $request->passwordConfirmation) {
+            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Confirmação de senha inválida'], 400);
+        }
+
+        $data = $request->except('email_verified_at', 'remember_token');
+        $data['password'] = Hash::make($request->password);
+        $data['avatar'] = '/src/assets/users/profile.png';
+
+        $user = User::create($data);
+        $user->save();
+
+        return response()->json(['success' => 'Cadastrou com sucesso!', 'message' => 'Acesse agora mesmo sua conta e aproveite nosso app!', $user], 200);       
+    }
+
+    public function show()
+    {
         $user = User::find(auth()->user()->id);
         $me = $user->replicate();
 
@@ -38,42 +68,29 @@ class UserController extends Controller
         return response()->json($me);
     }
 
-    public function create()
-    {
-        
-    }
-
-    public function store(Request $request)
-    {
-        if($this->verifyEmail($request) > 0) {
-            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Já existe um usuário com este e-mail'], 400);
-        } else if($request->password != $request->passwordConfirmation) {
-            return response()->json(['error' => 'Falha no cadastro', 'message' => 'Confirmação de senha inválida'], 400);
-        } else {
-            $data = $request->except('email_verified_at', 'remember_token');
-            $data['password'] = Hash::make($request->password);
-            $data['avatar'] = '/src/assets/users/profile.png';
-
-            $user = User::create($data);
-            $user->save();
-
-            return response()->json(['success' => 'Cadastrou com sucesso!', 'message' => 'Acesse agora mesmo sua conta e aproveite nosso app!', $user], 200);
-        }        
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
     public function edit($id)
     {
         //
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $me = User::find(auth()->user()->id);
+
+        if(!Hash::check($request->oldPassword, $me->password)) {
+            return response()->json(['error' => $request->oldPassword, 'message' => $me->password], 400);
+        }
+        if($request->password !== $request->confirmPassword) {
+            return response()->json(['error' => 'Falha ao editar perfil', 'message' => 'Confirmação de senha inválida'], 400);
+        }
+
+        $data = $request->except('email_verified_at', 'remember_token');
+        $data['password'] = Hash::make($request->password);
+
+        $me->update($data);
+
+        return response()->json(['success' => 'Editou com sucesso!', 'message' => 'Perfil editado com sucesso!', $me], 200);       
+        
     }
 
     public function destroy($id)
