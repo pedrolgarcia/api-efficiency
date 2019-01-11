@@ -28,5 +28,8 @@ Route::group(['middleware' => 'jwt.auth',], function () {
 
     // Project
     Route::resource('projects', 'ProjectController');
+    Route::post('projects/filter', 'ProjectController@filter');
+    Route::post('projects/{id}/finish', 'ProjectController@finish');
+    Route::post('projects/{id}/back', 'ProjectController@back');
 
 });
