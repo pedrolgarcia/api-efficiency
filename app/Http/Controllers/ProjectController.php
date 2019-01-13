@@ -24,7 +24,19 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        //
+        Project::create([
+            'name' => $request->data['nome'],
+            'started_at' => $request->data['inicio'],
+            'ended_at' => $request->data['entrega'],
+            'description' => $request->data['descricao'],
+            'user_id' => auth()->user()->id,
+            'status_id' => 1,
+        ]);
+
+        return response()->json([
+            'success' => 'Projeto criado com sucesso!', 
+            'message' => 'O próximo passo é criar sua primeira tarefa. Vamos lá!']
+        , 200);
     }
 
     public function show($id)
