@@ -48,11 +48,6 @@ class ProjectController extends Controller
         return response()->json($project, 200);
     }
 
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request, $id)
     {
         $project = Project::find($id);

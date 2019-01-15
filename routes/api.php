@@ -32,4 +32,11 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     Route::post('projects/{id}/finish', 'ProjectController@finish');
     Route::post('projects/{id}/back', 'ProjectController@back');
 
+    // Task
+    //Route::get('projects/{project_id}/tasks', 'TaskController@index');
+    Route::resource('tasks', 'TaskController');
+    Route::post('tasks/{id}/finish', 'TaskController@finish');
+    Route::post('tasks/{id}/back', 'TaskController@back');
+    Route::get('categories', 'TaskController@getCategories');
+
 });
