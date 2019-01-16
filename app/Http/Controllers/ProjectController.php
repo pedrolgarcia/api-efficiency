@@ -98,6 +98,13 @@ class ProjectController extends Controller
             'completed_at' => Carbon::now()
         ]);
 
+        foreach ($project->tasks as $task) {
+            $task->update([
+                'status_id' => 2,
+                'completed_at' => Carbon::now()
+            ]);
+        }
+
         return response()->json([
             'success' => $project->name . ' finalizado com sucesso!', 
             'message' => 'Parabéns você concluiu seu projeto no dia ' . $project->completed_at]
@@ -108,6 +115,11 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         $project->update([
+            'status_id' => 1,
+            'completed_at' => null
+        ]);
+
+        $project->tasks->last()->update([
             'status_id' => 1,
             'completed_at' => null
         ]);

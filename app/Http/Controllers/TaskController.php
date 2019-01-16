@@ -25,7 +25,17 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        //
+        Task::create([
+            'name' => $request->data['nome'],
+            'started_at' => $request->data['inicio'],
+            'ended_at' => $request->data['entrega'],
+            'status_id' => 1,
+            'category_id' => $request->data['categoria'],
+            'project_id' => $request->data['projeto'],
+            'description' => $request->data['descricao']
+        ]);
+
+        return response()->json(['success' => 'Tarefa cadastrada com sucesso!'], 200);
     }
 
     public function show($id)
