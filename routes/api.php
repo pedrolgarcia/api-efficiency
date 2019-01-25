@@ -41,8 +41,12 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     // Reports
 
     // Annotation
-    Route::get('annotations/{id?}', 'ReportController@getAnnotation');
+    Route::get('annotations/{id}', 'ReportController@getAnnotation');
     Route::post('annotations/{id?}', 'ReportController@saveAnnotation');
+    Route::delete('annotations/{id}', 'ReportController@deleteAnnotation');
     // Time Reports
+    Route::get('time-reports/{id}', 'ReportController@getTimeReport');
+    Route::post('time-reports/{id}', 'ReportController@saveTimeReport');
+    Route::delete('time-reports/{id}', 'ReportController@deleteTimeReport');
 
 });
