@@ -39,7 +39,6 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     Route::get('categories', 'TaskController@getCategories');
 
     // Reports
-
     // Annotation
     Route::get('annotations/{id}', 'ReportController@getAnnotation');
     Route::post('annotations/{id?}', 'ReportController@saveAnnotation');
@@ -48,5 +47,18 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     Route::get('time-reports/{id}', 'ReportController@getTimeReport');
     Route::post('time-reports/{id}', 'ReportController@saveTimeReport');
     Route::delete('time-reports/{id}', 'ReportController@deleteTimeReport');
+    // Erro Reports
+    Route::get('error-types', 'ReportController@getErrorTypes');
+    Route::get('error-reports/{id}', 'ReportController@getErrorReport');
+    Route::post('error-reports/{id}', 'ReportController@saveErrorReport');
+    Route::delete('error-reports/{id}', 'ReportController@deleteErrorReport');
+
+    // Performance
+    Route::get('performance/projects-tasks/{status?}', 'PerformanceController@getProjectsTasks');
+    Route::get('performance/errors', 'PerformanceController@getErrors');
+    Route::get('performance/tasks-category', 'PerformanceController@getTasksByCategory');
+
+    // Timer
+    Route::post('tasks/{id}/timer', 'TaskController@setTime');
 
 });

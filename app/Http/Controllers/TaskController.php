@@ -80,7 +80,7 @@ class TaskController extends Controller
         ]);
 
         return response()->json([
-            'success' => $task->name . ' finalizada com sucesso!', 
+            'success' => 'Tarefa ' . $task->name . ' finalizada com sucesso!', 
             'message' => 'Parabéns você concluiu sua tarefa no dia ' . $task->completed_at]
         , 200);
     }
@@ -103,5 +103,26 @@ class TaskController extends Controller
         $categories = Category::all();
 
         return response()->json($categories, 200);
+    }
+
+    public function setTime(Request $request, $id) {
+        $hour = substr($request->tempo, 0, 1);
+        $minute = substr($request->tempo, 3, 4);
+        $second = substr($request->tempo, 6, 7);
+
+        $task = Task::find($id);
+        if ($task->time) {
+            $tempo = Carbon::createFromFormat('H:i:s', $task->time);
+            $tempo->addSecond($second);
+            $tempo->addMinute($minute);
+            $tempo->addHour($hour);
+
+            $task->update([
+                'time' => $tempo
+            ]);
+        } else {
+            $task->time = $request->tempo;
+            $task->save();
+        }
     }
 }
