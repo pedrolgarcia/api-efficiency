@@ -43,6 +43,20 @@ class TaskController extends Controller
         $task = Task::find($id);
         $task->status;
         $task->category;
+        Carbon::setLocale('pt_BR');
+        $dateStart = Carbon::parse($task->started_at);
+        $task['start'] = $dateStart->diffForHumans(Carbon::now());
+
+        if ($task->completed_at) {
+            $dateEnd = Carbon::parse($task->completed_at);
+            $task['end'] = $dateEnd->diffForHumans(Carbon::now());
+        }
+
+        if ($task->ended_at < Carbon::now()->toDateTimeString()) {
+            $dateLate = Carbon::parse($task->ended_at);
+            $task['late'] = $dateLate->diffForHumans(Carbon::now());
+            $task['late'] = str_replace('atrás', '', $task['late']);
+        }
 
         return response()->json($task, 200);
     }

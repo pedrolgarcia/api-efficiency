@@ -61,4 +61,9 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     // Timer
     Route::post('tasks/{id}/timer', 'TaskController@setTime');
 
+    // Settings
+    Route::get('languages', 'SettingsController@getLanguages');
+    Route::get('themes', 'SettingsController@getThemes');
+    Route::get('settings', 'SettingsController@getSettings');
+    Route::post('settings', 'SettingsController@saveSettings');
 });
