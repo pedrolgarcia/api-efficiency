@@ -34,6 +34,7 @@ Route::group(['middleware' => 'jwt.auth',], function () {
 
     // Task
     Route::resource('tasks', 'TaskController');
+    Route::get('all-tasks', 'TaskController@getAllTasks');
     Route::post('tasks/{id}/finish', 'TaskController@finish');
     Route::post('tasks/{id}/back', 'TaskController@back');
     Route::get('categories', 'TaskController@getCategories');

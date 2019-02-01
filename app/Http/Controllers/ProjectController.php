@@ -15,8 +15,40 @@ class ProjectController extends Controller
         $projects = $user->projects;
 
         foreach ($projects as $project) {
-            $project->tasks;
+            $tasks = $project->tasks;
             $project->status;
+            // Dados adicionais
+            Carbon::setLocale('pt_BR');
+            $dateStart = Carbon::parse($project->started_at);
+            $project['start'] = $dateStart->diffForHumans(Carbon::now());
+
+            if ($project->completed_at) {
+                $dateEnd = Carbon::parse($project->completed_at);
+                $project['end'] = $dateEnd->diffForHumans(Carbon::now());
+            }
+            
+            $project['time'] = Carbon::createFromFormat('H:i:s', '00:00:00');
+            
+            $project['tasks_qtd'] = $tasks->count();
+            foreach ($tasks as $key => $task) {
+                if ($task->time) {
+                    $hour = substr($task->time, 0, 1);
+                    $minute = substr($task->time, 3, 4);
+                    $second = substr($task->time, 6, 7);
+                    
+                    $project['time']->addSecond($second);
+                    $project['time']->addMinute($minute);
+                    $project['time']->addHour($hour);
+                }
+            }
+
+            $project['time'] = substr($project['time'], 11, 18);
+
+            if ($project->ended_at < Carbon::now()->toDateTimeString()) {
+                $dateLate = Carbon::parse($project->ended_at);
+                $project['late'] = $dateLate->diffForHumans(Carbon::now());
+                $project['late'] = str_replace('atrás', '', $project['late']);
+            }
         }
 
         return response()->json($projects, 200);

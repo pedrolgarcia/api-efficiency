@@ -23,6 +23,33 @@ class TaskController extends Controller
         return response()->json($tasks, 200);
     }
 
+    public function getAllTasks() {
+        $tasks = Task::all();
+        
+        foreach ($tasks as $task) {
+            $task->status;
+            $task->category;
+            $task['project'] = Project::find($task->project_id)->name;
+
+            Carbon::setLocale('pt_BR');
+            $dateStart = Carbon::parse($task->started_at);
+            $task['start'] = $dateStart->diffForHumans(Carbon::now());
+
+            if ($task->completed_at) {
+                $dateEnd = Carbon::parse($task->completed_at);
+                $task['end'] = $dateEnd->diffForHumans(Carbon::now());
+            }
+
+            if ($task->ended_at < Carbon::now()->toDateTimeString()) {
+                $dateLate = Carbon::parse($task->ended_at);
+                $task['late'] = $dateLate->diffForHumans(Carbon::now());
+                $task['late'] = str_replace('atrás', '', $task['late']);
+            }
+        }
+
+        return response()->json($tasks, 200);
+    }
+
     public function store(Request $request)
     {
         Task::create([
