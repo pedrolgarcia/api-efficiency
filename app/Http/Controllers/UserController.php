@@ -43,6 +43,24 @@ class UserController extends Controller
         return response()->json(['success' => 'Cadastrou com sucesso!', 'message' => 'Acesse agora mesmo sua conta e aproveite nosso app!', $user], 200);       
     }
 
+    public function photoUpload(Request $request) {
+        $this->validate($request, [
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/users_imgs');
+            $image->move($destinationPath, $name);
+            $this->save();
+
+            $path = $destinationPath . $name;
+    
+            return response()->json(['success' => 'Foto salva com sucesso!', 'path' => $path ]);
+        }
+    }
+
     public function show()
     {
         $user = User::find(auth()->user()->id);

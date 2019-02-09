@@ -25,6 +25,7 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     // User
     Route::get('me', 'UserController@show');
     Route::put('me', 'UserController@update');
+    Route::post('photoUpload', 'UserController@photoUpload');
 
     // Project
     Route::resource('projects', 'ProjectController');
