@@ -70,7 +70,7 @@ class PerformanceController extends Controller
             }
         }
 
-        $data['average'] = $data['errors'] / $qtdTask;
+        $data['average'] = $qtdTask != 0 || $data['errors'] != 0 ? $data['errors'] / $qtdTask : 0;
         $data['average'] = number_format((float)$data['average'], 1, ',', '');
         
         return response()->json($data, 200);

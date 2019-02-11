@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Setting;
 
 class AuthController extends Controller
 {
@@ -18,7 +19,9 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        return $this->respondWithToken($token, $user);
+        $settings = Setting::where('user_id', $user->id)->get();
+
+        return $this->respondWithToken($token, $user, $settings[0]);
     }
 
     public function me()
@@ -38,13 +41,14 @@ class AuthController extends Controller
         return $this->respondWithToken(auth()->refresh());
     }
 
-    protected function respondWithToken($token, $user = null)
+    protected function respondWithToken($token, $user = null, $settings = null)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => $user
+            'user' => $user,
+            'settings' => $settings
         ]);
     }
 }

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 // Autentication routes
 Route::post('login', 'AuthController@login');
 Route::post('register', 'UserController@store');
+Route::post('photoUpload/{id?}', 'UserController@photoUpload');
 Route::post('refresh', 'AuthController@refresh');
 
 Route::group(['middleware' => 'jwt.auth',], function () {
@@ -25,7 +26,6 @@ Route::group(['middleware' => 'jwt.auth',], function () {
     // User
     Route::get('me', 'UserController@show');
     Route::put('me', 'UserController@update');
-    Route::post('photoUpload', 'UserController@photoUpload');
 
     // Project
     Route::resource('projects', 'ProjectController');

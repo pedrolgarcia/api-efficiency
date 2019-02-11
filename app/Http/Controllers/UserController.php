@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use App\Task;
+use App\Setting;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use App\Http\Resources\User as UserResource;
@@ -40,25 +41,42 @@ class UserController extends Controller
         $user = User::create($data);
         $user->save();
 
+        Setting::create([
+            'tips' => '1',
+            'language_id' => '1',
+            'theme_id' => '1',
+            'user_id' => $user->id,
+        ]);
+
         return response()->json(['success' => 'Cadastrou com sucesso!', 'message' => 'Acesse agora mesmo sua conta e aproveite nosso app!', $user], 200);       
     }
 
-    public function photoUpload(Request $request) {
+    public function photoUpload(Request $request, $id) {
         $this->validate($request, [
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
         ]);
     
         if ($request->hasFile('photo')) {
             $image = $request->file('photo');
-            $name = time().'.'.$image->getClientOriginalExtension();
+            $name = time().'_'.str_replace(' ', '', $image->getClientOriginalName());
             $destinationPath = public_path('/users_imgs');
             $image->move($destinationPath, $name);
-            $this->save();
+            
+            $path = '/users_imgs/' . $name;
+            
+            if(!$id) {
+                $user = User::orderBy('created_at', 'desc')->first();
+            } else {
+                $user = User::find($id);
+            }
 
-            $path = $destinationPath . $name;
+            $user->avatar = $path;
+            $user->save();
     
             return response()->json(['success' => 'Foto salva com sucesso!', 'path' => $path ]);
         }
+
+        return response()->json(['success' => 'Nenhuma foto enviada!']);
     }
 
     public function show()
@@ -95,15 +113,22 @@ class UserController extends Controller
     {
         $me = User::find(auth()->user()->id);
 
-        if(!Hash::check($request->oldPassword, $me->password)) {
-            return response()->json(['error' => $request->oldPassword, 'message' => $me->password], 400);
-        }
-        if($request->password !== $request->confirmPassword) {
-            return response()->json(['error' => 'Falha ao editar perfil', 'message' => 'Confirmação de senha inválida'], 400);
+        if($request->password) {
+            $data = $request->except('email_verified_at', 'remember_token');
+
+            if(!Hash::check($request->oldPassword, $me->password)) {
+                return response()->json(['error' => $request->oldPassword, 'message' => $me->password], 400);
+            }
+            if($request->password !== $request->confirmPassword) {
+                return response()->json(['error' => 'Falha ao editar perfil', 'message' => 'Confirmação de senha inválida'], 400);
+            }
+
+            $data['password'] = Hash::make($request->password);
         }
 
-        $data = $request->except('email_verified_at', 'remember_token');
-        $data['password'] = Hash::make($request->password);
+        if(!$request->password) {
+            $data = $request->except('email_verified_at', 'remember_token', 'password');
+        }
 
         $me->update($data);
 
