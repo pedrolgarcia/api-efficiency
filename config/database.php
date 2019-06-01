@@ -47,7 +47,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'mysql' => [
+        // 'mysql' => [
             // 'driver' => 'mysql',
             // 'host' => env('DB_HOST', '127.0.0.1'),
             // 'port' => env('DB_PORT', '3306'),
@@ -61,17 +61,17 @@ return [
             // 'prefix_indexes' => true,
             // 'strict' => true,
             // 'engine' => null,
-            'mysql' => array(
-                'driver'    => 'mysql',
-                'host'      => $host,
-                'database'  => $database,
-                'username'  => $username,
-                'password'  => $password,
-                'charset'   => 'utf8',
-                'collation' => 'utf8_unicode_ci',
-                'prefix'    => '',
-            ),
-        ],
+        // ],
+        'mysql' => array(
+            'driver'    => 'mysql',
+            'host'      => $host,
+            'database'  => $database,
+            'username'  => $username,
+            'password'  => $password,
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ),
 
         'pgsql' => [
             'driver' => 'pgsql',
