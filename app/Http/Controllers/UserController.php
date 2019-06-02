@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $data = $request->except('email_verified_at', 'remember_token');
         $data['password'] = Hash::make($request->password);
-        $data['avatar'] = '/src/assets/users/profile.png';
+        $data['avatar'] = '/assets/users/profile.png';
 
         $user = User::create($data);
         $user->save();
